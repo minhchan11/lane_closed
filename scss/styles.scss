@@ -16,9 +16,12 @@
   font-size: 6em;
 }
 
-#closure1Slider .slider-selection {
-	background: #BABABA;
+@for $i from 1 through 3 {
+  #closure_#{$i}Slider .slider-selection {
+  	background: #BABABA;
+  }
 }
+
 
 .chart {
   background-color: lightGray;
