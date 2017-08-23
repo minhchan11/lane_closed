@@ -1,11 +1,11 @@
 $(document).ready(function () {
 
-  var lanesClosure = new Array(3);
+  var lanesClosure = new Array(3).fill("0");
   for (var i = 1; i < 4; i++) {
     $('#closure'+i).slider({
   	min: 0,
   	max: 24,
-  	value: [1+i, 7+i],
+  	value: [0,12],
   	labelledby: ['closure1_low', 'closure1_high']
   });
 
@@ -17,6 +17,13 @@ $(document).ready(function () {
   $("#setClosure_"+i).unbind('click').on('click',function () {
     var currentNumber = $(this)[0].id.split("_").pop();
     lanesClosure[currentNumber-1]=$("#closure"+currentNumber).val();
+  });
+
+  $("#resetClosure_"+i).unbind('click').on('click',function () {
+    var currentNumber = $(this)[0].id.split("_").pop();
+    lanesClosure[currentNumber-1]="0,0";
+    $("#closure" + currentNumber).slider('setValue',[0,12], true, true);
+    $("#closureTime_"+currentNumber).text("");
   });
 
   }
