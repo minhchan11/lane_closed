@@ -36,6 +36,8 @@
   "dependencies": {
     "d3-axis": "^1.0.8",
     "jStat": "^1.7.0",
+    "mathjs": "^3.16.2",
+    "nerdamer": "^0.7.11",
     "numbers": "^0.6.0"
   }
 }
