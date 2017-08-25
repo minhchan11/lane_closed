@@ -124,15 +124,6 @@ $(document).ready(function () {
        .attr("fill", "lightpink")
        .attr("opacity", 0.4)
 
-	    // group.selectAll(".area")
-	    //   .data([data])
-	    //   .enter()
-	    //   .append("path")
-	    //   .attr("class", "area")
-	    //   .attr("d", area)
-	    //   .attr("fill", "lightsteelblue")
-	    //   .attr("stroke-width", 0)
-	    //   .attr("opacity", 0.4);
 
 	    group.append("g")
 	      .attr("transform", "translate (0," + (height - 200) + ")") // move down x
@@ -178,6 +169,21 @@ $(document).ready(function () {
     lanesClosure[currentNumber-1]="0,0";
     $("#closure" + currentNumber).slider('setValue',[0,12], true, true);
     $("#closureTime_"+currentNumber).text("");
+  });
+
+  $("#enableClosure_"+i).unbind('click').on('click',function () {
+    var currentNumber = $(this)[0].id.split("_").pop();
+    // console.log($("#closure"+currentNumber));
+    var sliderEnabled = $("#closure"+currentNumber)[0].attributes[2].value;
+    if(sliderEnabled == 'false'){
+      $("#closure"+currentNumber).slider("enable");
+      $("#closure"+currentNumber)[0].attributes[2].value = 'true';
+      $("#closureTime_"+currentNumber).text("");
+    } else {
+      $("#closure"+currentNumber).slider("disable");
+      $("#closure"+currentNumber)[0].attributes[2].value = 'false';
+      $("#closureTime_"+currentNumber).text("Not yet included in calculation");
+    };
   });
 
   }
