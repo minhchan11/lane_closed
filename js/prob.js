@@ -1,3 +1,11 @@
+/**
+ * @file porousCalculation.js
+ * @author Minh Phuong, James Feracor,Charles W. Schwartz
+ * @copyright Michael Mathews 2017
+              © Pavia Systems 2016. All rights reserved.
+ * Algorithm to
+ */
+
 var calculationAASHTO = function(structuralNum){
 return  (-0.674*0.45)+9.36*(Math.log10(structuralNum+1)) - 0.2 + Math.log10(2.5/2.7)/(0.4+(1094/Math.pow((structuralNum+1),5.19))) + 2.32*Math.log10(20000) - 8.07 - Math.log10(3000000);
 }

@@ -17,8 +17,14 @@
 }
 
 @for $i from 1 through 3 {
-  #closure_#{$i}Slider .slider-selection {
+  #closureSlider_#{$i} .slider-selection {
   	background: #BABABA;
+  }
+  #setClosure_#{$i} {
+  	display:none;
+  }
+  #resetClosure_#{$i} {
+  	display:none;
   }
 }
 

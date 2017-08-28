@@ -1,12 +1,12 @@
 $(document).ready(function () {
 
   var lanesClosure = new Array(3).fill("0,0");
-  for (var i = 1; i < 4; i++) {
+  for (var i = 1; i <= 3; i++) {
     $('#closure'+i).slider({
   	min: 0,
   	max: 24,
   	value: [0,12],
-  	labelledby: ['closure1_low', 'closure1_high']
+  	labelledby: ['closure'+i+'_low', 'closure'+i+'_high']
   });
   var trafficArray = [
                 0.019,
@@ -34,7 +34,7 @@ $(document).ready(function () {
 								0.026,
 								0.015
             ];
-  var trafficData = function(trafficArray){
+  var convertTrafficData = function(trafficArray){
     var dataObject = [];
     for (var i = 0; i < trafficArray.length; i++) {
       el = {
@@ -46,12 +46,12 @@ $(document).ready(function () {
     return dataObject;
   };
 
-  function drawGraph(data) {
+  function laneClosureGraph(data,closureHours) {
 	    cleanGraph();
 
 	    var width = 600;
 	    var height = 400;
-	    var canvas = d3.select("#d3Graph")
+	    var canvas = d3.select("#d3LaneGraph")
 	      .append("svg")
 	      .attr("width", width)
 	      .attr("height", height)
@@ -102,8 +102,6 @@ $(document).ready(function () {
 	      })
 	      .curve(d3.curveMonotoneX);
 
-      var rectData = ["2,4","6,8","10,14"];
-
 	    group.selectAll("path")
 	      .data([data])
 	      .enter()
@@ -113,7 +111,7 @@ $(document).ready(function () {
 	      .attr("stroke", "steelBlue")
 	      .attr("stroke-width", "1.5px");
 
-        group.selectAll('rect').data(rectData)
+        group.selectAll('rect').data(closureHours)
        .enter()
        .append("rect")
        .attr("x", function(d){ return x(parseInt(d.split(',')[0]))})
@@ -144,7 +142,7 @@ $(document).ready(function () {
 	      .attr("x", 0 - (height / 2))
 	      .attr("dy", "1em")
 	      .style("text-anchor", "middle")
-	      .text("Hourly Traffic Demand");
+	      .text("Traffic Demand (%)");
 	  }
 
 		//prevent duplicated appending
@@ -152,7 +150,9 @@ $(document).ready(function () {
 	    d3.select("svg").remove();
 	  }
 
-    drawGraph(trafficData(trafficArray));
+      laneClosureGraph(convertTrafficData(trafficArray),lanesClosure);
+
+
 
   $("#closure" + i).on("slide", function(slideEvt) {
     var timeRange = (slideEvt.currentTarget.value).split(",");
@@ -162,6 +162,7 @@ $(document).ready(function () {
   $("#setClosure_"+i).unbind('click').on('click',function () {
     var currentNumber = $(this)[0].id.split("_").pop();
     lanesClosure[currentNumber-1]=$("#closure"+currentNumber).val();
+    laneClosureGraph(convertTrafficData(trafficArray),lanesClosure);
   });
 
   $("#resetClosure_"+i).unbind('click').on('click',function () {
@@ -169,6 +170,7 @@ $(document).ready(function () {
     lanesClosure[currentNumber-1]="0,0";
     $("#closure" + currentNumber).slider('setValue',[0,12], true, true);
     $("#closureTime_"+currentNumber).text("");
+    laneClosureGraph(convertTrafficData(trafficArray),lanesClosure);
   });
 
   $("#enableClosure_"+i).unbind('click').on('click',function () {
@@ -179,10 +181,23 @@ $(document).ready(function () {
       $("#closure"+currentNumber).slider("enable");
       $("#closure"+currentNumber)[0].attributes[2].value = 'true';
       $("#closureTime_"+currentNumber).text("");
+      $("#setClosure_"+currentNumber).toggle();
+      $("#resetClosure_"+currentNumber).toggle();
+      $(this).removeClass('btn-warning');
+      $(this).addClass('btn-danger');
+      $(this).text('Disable');
     } else {
+      $("#closure" + currentNumber).slider('setValue',[0,12], true, true);
       $("#closure"+currentNumber).slider("disable");
       $("#closure"+currentNumber)[0].attributes[2].value = 'false';
+      lanesClosure[currentNumber-1]="0,0";
       $("#closureTime_"+currentNumber).text("Not yet included in calculation");
+      laneClosureGraph(convertTrafficData(trafficArray),lanesClosure);
+      $("#setClosure_"+currentNumber).toggle();
+      $("#resetClosure_"+currentNumber).toggle();
+      $(this).removeClass('btn-danger');
+      $(this).addClass('btn-warning');
+      $(this).text('Enable');
     };
   });
 
